@@ -1,0 +1,24 @@
+// MongoDB Playground
+// To disable this template go to Settings | MongoDB | Use Default Template For Playground.
+// Make sure you are connected to enable completions and to be able to run a playground.
+// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
+
+// Select the database to use.
+use('mongodbVSCodePlaygroundDB');
+
+// The drop() command destroys all data from a collection.
+// Make sure you run it against the correct database and collection.
+db.interactions.drop();
+
+// Insert a few documents into the sales collection.
+db.interactions.insertMany([
+  { '_id': 1, 'accountID': 1, 'userName': 'adamrobson', 'titleID': 10, 'userAction': "paused", 'dateTime': new Date('2022-02-01T08:00:00Z'), 'poi': "00:03:33", 'toi': "Pause Button Clicked"},
+  { '_id': 2, 'accountID': 1, 'userName': 'adamrobson', 'titleID': 10, 'userAction': "play", 'dateTime': new Date('2022-02-02T08:30:00Z'), 'poi': "00:03:33", 'toi': "Pause Button Clicked"},
+  { '_id': 3, 'accountID': 1, 'userName': 'adamrobson', 'titleID': 10, 'userAction': "paused", 'dateTime': new Date('2022-02-03T08:35:00Z'), 'poi': "00:05:55", 'toi': "Spacebar Pressed"},
+  { '_id': 4, 'accountID': 1, 'userName': 'adamrobson', 'titleID': 11, 'userAction': "play", 'dateTime': new Date('2022-02-04T08:38:00Z'), 'poi': "00:05:55", 'toi': "Spacebar Pressed"},
+  { '_id': 5, 'accountID': 1, 'userName': 'adamrobson', 'titleID': 11, 'userAction': "paused", 'dateTime': new Date('2022-02-04T08:45:00Z'), 'poi': "00:05:55", 'toi': "Spacebar Pressed"},
+  { '_id': 6, 'accountID': 2, 'userName': 'joebloggs', 'titleID': 5, 'userAction': "play", 'dateTime': new Date('2022-02-04T09:13:00Z'), 'poi': "00:11:13", 'toi': "Spacebar Pressed"},
+  { '_id': 7, 'accountID': 2, 'userName': 'joebloggs', 'titleID': 5, 'userAction': "paused", 'dateTime': new Date('2022-02-04T09:45:00Z'), 'poi': "00:15:52", 'toi': "Spacebar Pressed"},
+  { '_id': 8, 'accountID': 3, 'userName': 'samsmith', 'titleID': 10, 'userAction': "play", 'dateTime': new Date('2022-02-04T11:33:00Z'), 'poi': "00:05:55", 'toi': "Spacebar Pressed"},
+
+]);

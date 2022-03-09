@@ -16,7 +16,7 @@ const app = express()
 const port = 3000
 
 //connection string listing the mongo servers. This is an alternative to using a load balancer. THIS SHOULD BE DISCUSSED IN YOUR ASSIGNMENT.
-const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/sweetShopDB?replicaSet=rs0';
+const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/notflixDB?replicaSet=rs0';
 
 setInterval(function() {
 
@@ -36,27 +36,31 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var Schema = mongoose.Schema;
 
-var stockSchema = new Schema({
+var interactionSchema = new Schema({
   _id: Number,
-  item: String,
-  price: Number,
-  quantity: Number
+  accountID: Number,
+  userName: String,
+  titleID: Number,
+  userAction: String,
+  dateTime: Date,
+  poi: String,
+  toi: String
 });
 
-var stockModel = mongoose.model('Stock', stockSchema, 'stock');
+var interactionModel = mongoose.model('Interaction', interactionSchema, 'interaction');
 
 
 
 app.get('/', (req, res) => {
-  stockModel.find({},'item price quantity lastName', (err, stock) => {
+  interactionModel.find({},'accountID userName titleID userAction dateTime poi toi', (err, stock) => {
     if(err) return handleError(err);
     res.send(JSON.stringify(stock))
   }) 
 })
 
 app.post('/',  (req, res) => {
-  var awesome_instance = new SomeModel(req.body);
-  awesome_instance.save(function (err) {
+  var interaction_instance = new interactionModel(req.body);
+  interaction_instance.save(function (err) {
   if (err) res.send('Error');
     res.send(JSON.stringify(req.body))
   });
