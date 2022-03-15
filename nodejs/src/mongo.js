@@ -47,7 +47,7 @@ var interactionSchema = new Schema({
   toi: String
 });
 
-var interactionModel = mongoose.model('Interaction', interactionSchema, 'interaction');
+var interactionModel = mongoose.model('Interactions', interactionSchema, 'interactions');
 
 
 
