@@ -2,8 +2,11 @@
 const mongoose = require('mongoose');
 var amqp = require('amqplib/callback_api');
 
-//Mongo db client library
-//const MongoClient  = require('mongodb');
+//Get the OS of the node
+const os = require('os');
+
+//Get the hostname of the OS
+var myhostname = os.hostname();
 
 //Express web service library
 const express = require('express')
@@ -20,7 +23,7 @@ const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmon
 
 setInterval(function () {
 
-  amqp.connect('amqp://test:test@192.168.56.10', function (error0, connection) {
+  amqp.connect('amqp://test:test@6130coursework_haproxy_1', function (error0, connection) {
 
     //if connection failed throw error
     if (error0) {
@@ -32,8 +35,8 @@ setInterval(function () {
       if (error1) {
         throw error1;
       }
-      var exchange = 'logs';
-      var msg = 'Hello World!';
+      var exchange = 'alive_message';
+      var msg = 'Hello World! :-(';
 
       channel.assertExchange(exchange, 'fanout', {
         durable: false
@@ -53,7 +56,7 @@ setInterval(function () {
 
 }, 3000);
 
-amqp.connect('amqp://test:test@192.168.56.10', function (error0, connection) {
+amqp.connect('amqp://test:test@6130coursework_haproxy_1', function (error0, connection) {
   if (error0) {
     throw error0;
   }
@@ -61,7 +64,7 @@ amqp.connect('amqp://test:test@192.168.56.10', function (error0, connection) {
     if (error1) {
       throw error1;
     }
-    var exchange = 'logs';
+    var exchange = 'alive_message';
 
     channel.assertExchange(exchange, 'fanout', {
       durable: false
@@ -73,7 +76,7 @@ amqp.connect('amqp://test:test@192.168.56.10', function (error0, connection) {
       if (error2) {
         throw error2;
       }
-      console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q.queue);
+      console.log(" [*] Waiting for messages ggin %s. To exit press CTRL+C", q.queue);
       channel.bindQueue(q.queue, exchange, '');
 
       channel.consume(q.queue, function (msg) {
