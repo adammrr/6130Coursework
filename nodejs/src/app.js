@@ -2,12 +2,6 @@
 const mongoose = require('mongoose');
 var amqp = require('amqplib/callback_api');
 
-//Get the OS of the node
-const os = require('os');
-
-//Get the hostname of the OS
-var myhostname = os.hostname();
-
 //Express web service library
 const express = require('express')
 
@@ -17,6 +11,17 @@ const bodyParser = require('body-parser');
 //instance of express and port to use for inbound connections.
 const app = express()
 const port = 3000
+
+//Get the OS and the OS Hostname
+const os = require('os');
+var thisHostName = os.hostname();
+
+var nodeID = Math.floor(Math.random() * (100 - 1 + 1) + 1);
+var currTime = new Date().getTime() / 1000;
+
+var nodeDetails = {hostname: thisHostName, nodeID: nodeID, lastMessageTime: currTime};
+var nodeDetailsList = [];
+nodeDetailsList.push(nodeDetails); //push the current nodes details into the list
 
 //connection string listing the mongo servers. This is an alternative to using a load balancer. THIS SHOULD BE DISCUSSED IN YOUR ASSIGNMENT.
 const connectionString = 'mongodb://localmongo1:27017,localmongo2:27017,localmongo3:27017/notflixDB?replicaSet=rs0';
@@ -36,14 +41,17 @@ setInterval(function () {
         throw error1;
       }
       var exchange = 'alive_message';
-      var msg = 'Hello World! :-(';
+      currTime = new Date().getTime() / 1000;
+      var msg = `{"hostname": "${thisHostName}", "nodeID": "${nodeID}"}`
 
+      var jsonMsg = JSON.stringify(JSON.parse(msg));
       channel.assertExchange(exchange, 'fanout', {
         durable: false
       });
 
-      channel.publish(exchange, '', Buffer.from(msg));
-      console.log(" [x] Sent %s", msg);
+      channel.publish(exchange, '', Buffer.from(jsonMsg));
+
+      console.log(" [%s] Sent %s", thisHostName, msg);
     });
 
 
@@ -81,7 +89,11 @@ amqp.connect('amqp://test:test@6130coursework_haproxy_1', function (error0, conn
 
       channel.consume(q.queue, function (msg) {
         if (msg.content) {
-          console.log(" [x] %s", msg.content.toString());
+          var incomingMessage = JSON.parse(msg.content.toString());
+          console.log(" [%s] Received %s", thisHostName, incomingMessage);
+          currTime = new Date().getTime() / 1000;
+          nodeDetailsList.some(details => details.hostname === incomingMessage.hostname) ? (nodeDetailsList.find(e => e.hostname === incomingMessage.hostname)).lastMessageTime = currTime : nodeDetailsList.push(incomingMessage);
+
         }
       }, {
         noAck: true

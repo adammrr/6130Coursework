@@ -37,18 +37,21 @@ services:
     restart: "no"
     entrypoint: [ "bash", "/scripts/mongo_setup.sh"]
   node1:
+    hostname: node1
     build: ./nodejs
     volumes:
       - ./nodejs/src:/usr/src/app/
     ports:
       - "81:3000"
   node2:
+    hostname: node2
     build: ./nodejs
     volumes:
       - ./nodejs/src:/usr/src/app/
     ports:
       - "82:3000"
   node3:
+    hostname: node3
     build: ./nodejs
     volumes:
       - ./nodejs/src:/usr/src/app/
